@@ -1,47 +1,56 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+import { reactive } from 'vue';
+import Formulario from './components/Formulario.vue';
+
+
+const estado = reactive({
+  numero1: '0',
+  numero2: '0',
+  operacao: '+',
+  resposta: 0,
+})
+
+const executaOperacao = () => {
+  switch (estado.operacao) {
+    case '+':
+      estado.resposta = parseInt(estado.numero1) + parseInt(estado.numero2);
+      break;
+    case '-':
+      estado.resposta = parseInt(estado.numero1) - parseInt(estado.numero2);
+      break;
+    case '*':
+      estado.resposta = parseInt(estado.numero1) * parseInt(estado.numero2);
+      break;
+    case '/':
+      estado.resposta = parseInt(estado.numero1) / parseInt(estado.numero2);
+      break;
+  }
+}
+
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
-
-  <main>
-    <TheWelcome />
-  </main>
+  <div class="container">
+    <header class="p-5 mb-4 mt-4 bg-light rounded-3">
+      <h1>Calculadora EBAC</h1>
+      <p>
+        Insira os numeros e a operação desejada
+      </p>
+    </header>
+    <Formulario 
+      :executa-operacao="executaOperacao"
+      :get-numero1="evento => estado.numero1 = evento.target.value"
+      :get-numero2="evento => estado.numero2 = evento.target.value"
+      :get-operacao="evento => estado.operacao = evento.target.value"
+      :retorna-resposta="estado.resposta"
+    />
+  </div>
 </template>
 
 <style scoped>
-header {
-  line-height: 1.5;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
+.resultado {
+  height: 100%;
+  border-radius: 10px;
+  text-align: center;
 }
 </style>
